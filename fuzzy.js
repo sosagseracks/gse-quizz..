@@ -80,7 +80,7 @@ function keywordAnswerCheck(expected, userInput, ratio = 0.6) {
 }
 
 // Pour des réponses courtes (1-2 mots) : contient / mot proche
-function simpleAnswerCheck(expected, userInput) {
+function singleSimpleCheck(expected, userInput) {
   const e = normalize(expected);
   const u = normalize(userInput);
   if (!u) return false;
@@ -95,6 +95,12 @@ function simpleAnswerCheck(expected, userInput) {
     .split(" ")
     .filter(Boolean)
     .every((ew) => u.split(" ").some((uw) => isWordMatch(ew, uw)));
+}
+
+// "expected" peut être un texte unique OU un tableau de réponses acceptées
+function simpleAnswerCheck(expected, userInput) {
+  const alternatives = Array.isArray(expected) ? expected : [expected];
+  return alternatives.some((alt) => singleSimpleCheck(alt, userInput));
 }
 
 // Vérifie qu'au moins n noms parmi la liste sont cités dans la réponse

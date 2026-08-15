@@ -50,27 +50,31 @@ npm start
 
 ## 4. Fonctionnement
 
-- Un membre envoie n'importe quel message en DM au bot.
-- Le bot lui explique les règles et lui demande son **identifiant**.
-- Une fois l'identifiant envoyé (et s'il n'a jamais été utilisé), le quiz démarre.
+- Un membre envoie n'importe quel message en DM au bot → ça lance le **Questionnaire GSE #1**.
+- S'il envoie exactement **`2`** en DM (et n'a pas de session en cours), ça lance le **Questionnaire GSE #2** (culture GSE) — il pioche **20 questions au hasard** parmi les 28 disponibles à chaque participation, donc deux personnes n'auront pas forcément les mêmes questions. Les deux quiz sont indépendants, chacun ne peut être fait qu'une fois.
+- Le bot demande son **identifiant**, puis pose les questions une par une.
 - À chaque réponse, le bot dit si c'est correct ou non (correction tolérante,
   pas besoin d'être exact au mot près) puis pose la question suivante.
 - À la fin, le bot annonce le score total : la personne peut faire une
   capture d'écran et l'envoyer dans son salon personnel.
-- Si la personne (ou son identifiant) a déjà participé, le bot le lui rappelle
-  et bloque une nouvelle tentative.
+- Si la personne (ou son identifiant) a déjà participé à un quiz donné, le bot le lui rappelle
+  et bloque une nouvelle tentative sur ce quiz (mais elle peut faire l'autre quiz).
 
 ## 5. Modifier les questions
 
-Toutes les questions/réponses sont dans `questions.js`. Chaque question a un `type` :
+Toutes les questions/réponses sont dans `questions.js`, séparées en deux
+listes exportées : `quiz1` (questionnaire GSE classique) et `quiz2`
+(déclenché en envoyant `2` au bot). Chaque question a un `type` :
 
 - `simple` : réponse courte (1-2 mots), ex. "Timeout", "Vrai", "Blacklist".
+  `answer` peut être un texte, ou un tableau si plusieurs réponses sont
+  acceptées, ex. `["Mexique", "Mexico"]`.
 - `keyword` : réponse plus longue, le bot vérifie qu'une majorité des
   mots-clés importants sont présents (tolère les reformulations).
 - `cite` : il faut citer au moins `n` éléments parmi une liste (`names`).
 
 Le nombre de points par question et le nombre total de questions
-s'adaptent automatiquement.
+s'adaptent automatiquement (voir `POINTS_PER_QUESTION`).
 
 ## 6. Commande admin (optionnelle)
 
